@@ -99,15 +99,10 @@ if (strcmp ($res, "VERIFIED") == 0) {
         $data = "$name\r\n$payer_email\r\n$receiver_email\r\n$item_name\r\n$payment_amount\r\n$payment_currency\r\n$item_number\r\n$payment_status\r\n";
         $mail = new PHPMailer();
 
-        $mail->isSMTP(true);
-        $mail->SMTPDebug=0;
-        $mail->SMTPAuth =true;
-        $mail->SMTPSecure='ssl';
-        $mail->Host='smtp.gmail.com';
-        $mail->Port=465;
-        $mail->isHTML(true); 
+        
         $mail->setFrom('solomaboya@gmail.com', 'Thato Maboya');
         $mail->addAddress($payer_email, $name);
+        $mail->isHTML(true); 
         $mail->Subject = "Your Purchase Details";
         $mail->Body = "
                    Hi, <br><br/>
@@ -117,7 +112,9 @@ if (strcmp ($res, "VERIFIED") == 0) {
                    Kind regards,
                    Thato Maboya.
         ";
-        $mail->addAttachment('');
+        //$mail->addAttachment('');
+        
+        $mail->send();
         if(!$mail->send()) {
          file_put_contents("error.txt", $data);
         } else {
