@@ -11,11 +11,9 @@
 <body>
 <?php
 use Snipworks\Smtp\Email;
-use PHPMailer\PHPMailer\PHPMailer;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
-require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
 // STEP 1: read POST data
 // Reading POSTed data directly from $_POST causes serialization issues with array data in the POST.
@@ -110,7 +108,6 @@ if (strcmp ($res, "VERIFIED") == 0) {
                    amzing REDCap Introductory workshop payments details.<br/><br/>
 
                    Kind regards,<br/>
-
                    Thato Maboya.');
 
         if(!$mail->send()) {
