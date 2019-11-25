@@ -10,6 +10,7 @@
 </head>
 <body>
 <?php
+use Snipworks\Smtp\Email;
 use PHPMailer\PHPMailer\PHPMailer;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
@@ -97,24 +98,21 @@ if (strcmp ($res, "VERIFIED") == 0) {
   
   if ($item_number == "IntroWorkshopFaculty" && $payment_currency == "USD" && $payment_status == "Completed" && $payment_amount == 48.5025){
         $data = "$name\r\n$payer_email\r\n$receiver_email\r\n$item_name\r\n$payment_amount\r\n$payment_currency\r\n$item_number\r\n$payment_status\r\n";
-        $mail = new PHPMailer();
-
-        
+       
+        $mail = new Email('smtp.example.com', 587);
+        $mail->setProtocol(Email::TLS);
+        $mail->setLogin('solomaboya@gmail.com', 'nthabisen');
+        $mail->addTo($payer_email, $name);
         $mail->setFrom('solomaboya@gmail.com', 'Thato Maboya');
-        $mail->addAddress($payer_email, $name);
-        $mail->isHTML(true); 
-        $mail->Subject = "Your Purchase Details";
-        $mail->Body = "
-                   Hi, <br><br/>
+        $mail->setSubject('Your Purchase Details');
+        $mail->setHtmlMessage('Hi, <br><br/>
                    Thank you for purchase. In the attachment you will find my
                    amzing REDCap Introductory workshop payments details.<br/><br/>
 
-                   Kind regards,
-                   Thato Maboya.
-        ";
-        //$mail->addAttachment('');
-        
-        $mail->send();
+                   Kind regards,<br/>
+
+                   Thato Maboya.');
+
         if(!$mail->send()) {
          file_put_contents("error.txt", $data);
         } else {
